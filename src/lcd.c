@@ -71,12 +71,17 @@
 #endif
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
 #include "hp48.h"
 #include "hp48_emu.h"
 #include "x48_x11.h"
 #include "annunc.h"
 #include "device.h"
+
+#include "buttons.h"
 
 static int last_annunc_state = -1;
 
@@ -167,6 +172,8 @@ init_nibble_maps()
 #endif
 }
 
+static unsigned short *fbdata;
+
 void
 #ifdef __FunctionProto__
 init_display(void)
@@ -174,6 +181,17 @@ init_display(void)
 init_display()
 #endif
 {
+  int fd = open("/dev/fb1", O_RDWR);
+  if (fd < 0) {
+    fprintf(stderr, "Could not open framebuffer\n");
+    exit(1);
+  }
+  fbdata = mmap(0, 480*320*2, PROT_READ|PROT_WRITE, MAP_SHARED, fd, (off_t) 0);
+  memset(fbdata, 0, 480*320*2);
+  unsigned short *dp = fbdata;
+  for (unsigned i=0; i<480*320; i++)
+	  *dp++ = 0b1000010000000000;
+
   display.on = (int)(saturn.disp_io & 0x8) >> 3;
 
   display.disp_start = (saturn.disp_addr & 0xffffe);
@@ -220,6 +238,15 @@ int val;
 #endif
 {
   int x, y;
+
+  unsigned short *dp = fbdata + (r*4+32) * 480 + (c*3*4)+36;
+  unsigned char v = val;
+  for (int i=0; i<4; i++,v>>=1,dp+=3) {
+	  dp[   0] = dp[   1] = dp[   2] =
+	  dp[ 480] = dp[ 481] = dp[ 482] =
+	  dp[ 960] = dp[ 961] = dp[ 962] =
+	  dp[1440] = dp[1441] = dp[1442] = (v & 1) ? 0 : 0b1111111111100000;
+  }
 
   x = (c * 8) + 5;
   if (r <= display.lines)
@@ -514,8 +541,40 @@ draw_annunc()
 {
   int val;
   int i;
-
+  
   val = display.annunc;
+  unsigned short *dp = fbdata+36;
+  unsigned char *bp = shl_bits;
+  unsigned char mask = 0x01;
+  for (unsigned y=0; y<14; y++) {
+	  for (unsigned x=0; x<24; x++) {
+		  unsigned char b = *bp & mask;
+		  if (!(mask <<= 1)) {
+			  bp++;
+			  mask = 0x01;
+		  }
+		  if ((val&1) == 0) b = 0;
+		  dp[0] = dp[1] = dp[480] = dp[481] = b ? 0b1111110111111111 : 0b1000010000000000;
+		  dp += 2;
+	  }
+	  dp += 480-24*2+480;
+  }
+  dp = fbdata+36+48;
+  bp = shr_bits;
+  mask = 0x01;
+  for (unsigned y=0; y<14; y++) {
+	  for (unsigned x=0; x<24; x++) {
+		  unsigned char b = *bp & mask;
+		  if (!(mask <<= 1)) {
+			  bp++;
+			  mask = 0x01;
+		  }
+		  if ((val&2) == 0) b = 0;
+		  dp[0] = dp[1] = dp[480] = dp[481] = b ? 0b0000011111111001 : 0b1000010000000000;
+		  dp += 2;
+	  }
+	  dp += 480-24*2+480;
+  }
 
   if (val == last_annunc_state)
     return;
