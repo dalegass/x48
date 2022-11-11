@@ -173,7 +173,13 @@ init_nibble_maps()
 }
 
 static unsigned short *fbdata;
-
+#define LCD_BLACK      0b0000000000000000
+#define LCD_PURPLE     0b1111110111111111 
+#define LCD_BACKGROUND 0b1111111111100000
+//#define LCD_BORDER     0b1000010000000000
+#define LCD_BORDER     LCD_BACKGROUND
+//#define LCD_BACKGROUND 0b0000000000000000
+#define LCD_WHITE      0b1111111111111111 
 void
 #ifdef __FunctionProto__
 init_display(void)
@@ -190,7 +196,7 @@ init_display()
   memset(fbdata, 0, 480*320*2);
   unsigned short *dp = fbdata;
   for (unsigned i=0; i<480*320; i++)
-	  *dp++ = 0b1000010000000000;
+	  *dp++ = LCD_BORDER;
 
   display.on = (int)(saturn.disp_io & 0x8) >> 3;
 
@@ -239,13 +245,17 @@ int val;
 {
   int x, y;
 
-  unsigned short *dp = fbdata + (r*4+32) * 480 + (c*3*4)+36;
+#define LCD_YMUL 4
+#define LCD_XMUL 3
+  unsigned short *dp = fbdata + (r*LCD_YMUL+40) * 480 + (c*LCD_XMUL*4)+43;
   unsigned char v = val;
-  for (int i=0; i<4; i++,v>>=1,dp+=3) {
-	  dp[   0] = dp[   1] = dp[   2] =
-	  dp[ 480] = dp[ 481] = dp[ 482] =
-	  dp[ 960] = dp[ 961] = dp[ 962] =
-	  dp[1440] = dp[1441] = dp[1442] = (v & 1) ? 0 : 0b1111111111100000;
+  unsigned char limit = 4;
+  if (c >= 0x21) return;
+  if (c == 0x20) limit=3;
+  for (int i=0; i<limit; i++,v>>=1,dp+=3) {
+	  for (unsigned row=0; row<480*LCD_YMUL; row += 480) {
+		  dp[row] = dp[row+1] = dp[row+2] = (v & 1) ? 0 : LCD_BACKGROUND;
+	  }
   }
 
   x = (c * 8) + 5;
@@ -541,57 +551,46 @@ draw_annunc()
 {
   int val;
   int i;
-  
-  val = display.annunc;
-  unsigned short *dp = fbdata+36;
-  unsigned char *bp = shl_bits;
-  unsigned char mask = 0x01;
-  for (unsigned y=0; y<14; y++) {
-	  for (unsigned x=0; x<24; x++) {
-		  unsigned char b = *bp & mask;
-		  if (!(mask <<= 1)) {
-			  bp++;
-			  mask = 0x01;
-		  }
-		  if ((val&1) == 0) b = 0;
-		  dp[0] = dp[1] = dp[480] = dp[481] = b ? 0b1111110111111111 : 0b1000010000000000;
-		  dp += 2;
-	  }
-	  dp += 480-24*2+480;
-  }
-  dp = fbdata+36+48;
-  bp = shr_bits;
-  mask = 0x01;
-  for (unsigned y=0; y<14; y++) {
-	  for (unsigned x=0; x<24; x++) {
-		  unsigned char b = *bp & mask;
-		  if (!(mask <<= 1)) {
-			  bp++;
-			  mask = 0x01;
-		  }
-		  if ((val&2) == 0) b = 0;
-		  dp[0] = dp[1] = dp[480] = dp[481] = b ? 0b0000011111111001 : 0b1000010000000000;
-		  dp += 2;
-	  }
-	  dp += 480-24*2+480;
-  }
 
+  val = display.annunc;
   if (val == last_annunc_state)
     return;
   last_annunc_state = val;
-  for (i = 0; ann_tbl[i].bit; i++)
-    {
-      if ((ann_tbl[i].bit & val) == ann_tbl[i].bit)
-        {
+  for (i = 0; ann_tbl[i].bit; i++) {
+      if (i < 100) {
+      unsigned short *dp = fbdata + ann_tbl[i].y*480*2+ann_tbl[i].x + 43;
+      unsigned char mask = 0x01;
+      if ((ann_tbl[i].bit & val) == ann_tbl[i].bit) {
+          unsigned char *bp = ann_tbl[i].bits;
+	  for (int y=0; y<ann_tbl[i].height; y++) {
+	          unsigned short *sp = dp;
+		  for (unsigned x=0; x<ann_tbl[i].width; x++) {
+			  unsigned char b = *bp & mask;
+			  if (!(mask <<= 1) || x==ann_tbl[i].width-1) {
+				  bp++;
+				  mask = 0x01;
+			  }
+			  sp[0] = sp[1] = sp[480] = sp[481] = b ? LCD_BLACK : LCD_BORDER;
+			  sp += 2;
+		  }
+		  dp += 480*2;
+	  }
           XCopyPlane(dpy, ann_tbl[i].pixmap, disp.win, disp.gc, 0, 0,
                      ann_tbl[i].width, ann_tbl[i].height,
                      ann_tbl[i].x, ann_tbl[i].y, 1);
-        }
-      else
-        {
+        } else {
+	  for (int y=0; y<ann_tbl[i].height; y++) {
+	          unsigned short *sp = dp;
+		  for (unsigned x=0; x<ann_tbl[i].width; x++) {
+			  sp[0] = sp[1] = sp[480] = sp[481] = LCD_BORDER;
+			  sp += 2;
+		  }
+		  dp += 480*2;
+	  }
           XClearArea(dpy, disp.win, ann_tbl[i].x, ann_tbl[i].y,
                      ann_tbl[i].width, ann_tbl[i].height, False);
         }
+      }
     }
   refresh_icon();
 }
