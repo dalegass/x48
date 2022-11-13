@@ -47,6 +47,11 @@
 #include "global.h"
 
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <linux/i2c-dev.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
 
 #include "hp48.h"
 #include "hp48_emu.h"
@@ -2423,6 +2428,70 @@ schedule()
   }
 }
 
+static int keyfd = -1;
+
+static void write_slave(unsigned char addr, unsigned char data) {
+	if (ioctl(keyfd, I2C_SLAVE, addr) < 0) {
+		perror("Can't ioctl i2c slave for write");
+		exit(1);
+	}
+	if (1 != write(keyfd, &data, 1)) {
+		perror("Can't write i2c slave");
+		exit(1);
+	}
+}
+
+static unsigned char read_slave(unsigned char addr) {
+	if (ioctl(keyfd, I2C_SLAVE, addr) < 0) {
+		perror("Can't ioctl i2c slave");
+		exit(1);
+	}
+	unsigned char b;
+	if (1 != read(keyfd, &b, 1)) {
+		perror("Can't read i2c slave");
+		exit(1);
+	}
+	return b;
+}
+
+static void init_keys() {
+	if (keyfd != -1) return;
+	keyfd = open("/dev/i2c-3", O_RDWR);
+	if (keyfd < 0) {
+		perror("Can't open i2c master");
+		exit(1);
+	}
+	printf("Slave opened as %d\n", keyfd);
+	write_slave(0x20, 0x3f);	// Inputs need all 1's on the output
+	write_slave(0x21, 0x00);	// Inputs need all 1's on the output
+}
+
+static unsigned char rowmap[] = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
+
+static void handle_keys() {
+	init_keys();
+
+	unsigned char new_on = 0;
+	for (unsigned char r=0; r<9; r++) {
+		unsigned char row = rowmap[r];
+		unsigned short mask = 1<<row;
+		write_slave(0x20, ((((mask>>8) & 3) << 6) ^ 0xc0) | 0x3f);
+		write_slave(0x21, (mask & 0xff) ^ 0xff);
+		unsigned char b1 = (read_slave(0x20) ^ 0xff) & 0x3f;
+		unsigned char old = saturn.keybuf.rows[r];
+		if ((old^b1)&b1) {
+			new_on++;
+			printf("r=%d bits=%03X\n", r, b1);
+		}
+		saturn.keybuf.rows[r] = b1;
+	}
+
+    if (new_on && saturn.kbd_ien) {
+	printf("Doing keyboard interrupt 2\n");
+        do_kbd_int();
+    }
+}
+
 int
 #ifdef __FunctionProto__
 emulate(void)
@@ -2451,25 +2520,22 @@ emulate()
   set_t1 = saturn.timer1;
 
   do {
+//  printf("Doing step instruction\n");
     step_instruction();
+    handle_keys();
+//  for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
 
     {
       int i;
-      for (i=0;
-           i < sizeof(saturn.keybuf.rows)/sizeof(saturn.keybuf.rows[0]);
-	   i++) {
+      for (i=0; i < sizeof(saturn.keybuf.rows)/sizeof(saturn.keybuf.rows[0]); i++) {
         if (saturn.keybuf.rows[i] || throttle) {
 #ifdef SOLARIS
           gettimeofday(&tv);
 #else
           gettimeofday(&tv, &tz);
 #endif
-          while ((tv.tv_sec == tv2.tv_sec) && ((tv.tv_usec - tv2.tv_usec) < 2)) {
-	    gettimeofday(&tv, &tz);
-          }
-
-          tv2.tv_usec = tv.tv_usec;
-          tv2.tv_sec = tv.tv_sec;
+          while ((tv.tv_sec == tv2.tv_sec) && ((tv.tv_usec - tv2.tv_usec) < 2)) gettimeofday(&tv, &tz);
+          tv2.tv_usec = tv.tv_usec; tv2.tv_sec = tv.tv_sec;
 	  break;
 	}
       }
@@ -2481,10 +2547,7 @@ emulate()
 //puts("bug");
 //	schedule_event = 0;
     }
-    if (schedule_event-- <= 0)
-      {
-        schedule();
-      }
+    if (schedule_event-- <= 0) schedule();
   } while (!enter_debugger);
 
   return 0;
