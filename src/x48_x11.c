@@ -3037,15 +3037,11 @@ int     b;
 	printf("Doing keyboard interrupt\n");
         do_kbd_int();
       }
-      if ((saturn.keybuf.rows[r] & c)) {
-fprintf(stderr, "bug\n");
-      }
       saturn.keybuf.rows[r] |= c;
     }
   }
 #ifdef DEBUG_BUTTONS
-  fprintf(stderr, "Button pressed  %d (%s)\n",
-          buttons[b].code, buttons[b].name);
+  fprintf(stderr, "Button pressed  %d (%s)\n", buttons[b].code, buttons[b].name);
 #endif
   return 0;
 }
@@ -3843,43 +3839,18 @@ GetEvent()
 			      char c = *p++;
 			      switch (c)
 				{
-				case '.':
-				  paste[paste_size++] = BUTTON_PERIOD;
-				  break;
-				case '0':
-				  paste[paste_size++] = BUTTON_0;
-				  break;
-				case '1':
-				  paste[paste_size++] = BUTTON_1;
-				  break;
-				case '2':
-				  paste[paste_size++] = BUTTON_2;
-				  break;
-				case '3':
-				  paste[paste_size++] = BUTTON_3;
-				  break;
-				case '4':
-				  paste[paste_size++] = BUTTON_4;
-				  break;
-				case '5':
-				  paste[paste_size++] = BUTTON_5;
-				  break;
-				case '6':
-				  paste[paste_size++] = BUTTON_6;
-				  break;
-				case '7':
-				  paste[paste_size++] = BUTTON_7;
-				  break;
-				case '8':
-				  paste[paste_size++] = BUTTON_8;
-				  break;
-				case '9':
-				  paste[paste_size++] = BUTTON_9;
-				  break;
-				case '\n':
-				  paste[paste_size++] = BUTTON_SHR;
-				  paste[paste_size++] = BUTTON_PERIOD;
-				  break;
+				case '.': paste[paste_size++] = BUTTON_PERIOD; break;
+				case '0': paste[paste_size++] = BUTTON_0; break;
+				case '1': paste[paste_size++] = BUTTON_1; break;
+				case '2': paste[paste_size++] = BUTTON_2; break;
+				case '3': paste[paste_size++] = BUTTON_3; break;
+				case '4': paste[paste_size++] = BUTTON_4; break;
+				case '5': paste[paste_size++] = BUTTON_5; break;
+				case '6': paste[paste_size++] = BUTTON_6; break;
+				case '7': paste[paste_size++] = BUTTON_7; break;
+				case '8': paste[paste_size++] = BUTTON_8; break;
+				case '9': paste[paste_size++] = BUTTON_9; break;
+				case '\n': paste[paste_size++] = BUTTON_SHR; paste[paste_size++] = BUTTON_PERIOD; break;
 				case '!':
 				  paste[paste_size++] = BUTTON_ALPHA;
 				  paste[paste_size++] = BUTTON_SHL;
@@ -4204,28 +4175,16 @@ GetEvent()
 /* printf("In display %d\n", xev.xbutton.button); */
 		    }
 		}
-              else
-	        {
-		  if (xev.xbutton.button == Button1
-		      || xev.xbutton.button == Button2
-		      || xev.xbutton.button == Button3
-		     )
-		    {
-		      for (i = BUTTON_A; i <= LAST_BUTTON; i++)
-			{
-			  if (xev.xbutton.subwindow == buttons[i].xwin)
-			    {
-			      if (buttons[i].pressed)
-				{
-				  if (xev.xbutton.button == Button3
-				     )
-				    {
+              else {
+		  if (xev.xbutton.button == Button1 || xev.xbutton.button == Button2 || xev.xbutton.button == Button3) {
+		      for (i = BUTTON_A; i <= LAST_BUTTON; i++) {
+			  if (xev.xbutton.subwindow == buttons[i].xwin) {
+			      if (buttons[i].pressed) {
+				  if (xev.xbutton.button == Button3) {
 				      button_released (i);
 				      DrawButton (i);
 				    }
-				}
-			      else
-				{
+				} else {
 				  last_button = i;
 				  button_pressed (i);
 				  wake = 1;
@@ -4242,18 +4201,10 @@ GetEvent()
 	    case ButtonRelease:
 
 	      first_key = 0;
-	      if (xev.xbutton.button == Button1)
-		{
-		  button_release_all ();
-		}
-	      if (xev.xbutton.button == Button2)
-		{
-		  if (last_button >= 0)
-		    {
-		      button_released (last_button);
-		      DrawButton (last_button);
-		    }
-		    last_button = -1;
+	      if (xev.xbutton.button == Button1) { button_release_all (); }
+	      if (xev.xbutton.button == Button2) {
+		  if (last_button >= 0) { button_released (last_button); DrawButton (last_button); }
+		  last_button = -1;
 		}
 	      break;
 

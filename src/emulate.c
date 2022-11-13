@@ -2483,12 +2483,13 @@ static void handle_keys() {
 			new_on++;
 			printf("r=%d bits=%03X\n", r, b1);
 		}
-		saturn.keybuf.rows[r] = b1;
+	//	saturn.keybuf.rows[r] = b1;
 	}
 
     if (new_on && saturn.kbd_ien) {
-	printf("Doing keyboard interrupt 2\n");
+	printf("Queueing keyboard interrupt 2\n");
         do_kbd_int();
+        for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
     }
 }
 
@@ -2529,11 +2530,7 @@ emulate()
       int i;
       for (i=0; i < sizeof(saturn.keybuf.rows)/sizeof(saturn.keybuf.rows[0]); i++) {
         if (saturn.keybuf.rows[i] || throttle) {
-#ifdef SOLARIS
-          gettimeofday(&tv);
-#else
           gettimeofday(&tv, &tz);
-#endif
           while ((tv.tv_sec == tv2.tv_sec) && ((tv.tv_usec - tv2.tv_usec) < 2)) gettimeofday(&tv, &tz);
           tv2.tv_usec = tv.tv_usec; tv2.tv_sec = tv.tv_sec;
 	  break;
@@ -2542,11 +2539,6 @@ emulate()
     }
 
 /* We need to throttle the speed here. */
-
-    if (schedule_event < 0) {
-//puts("bug");
-//	schedule_event = 0;
-    }
     if (schedule_event-- <= 0) schedule();
   } while (!enter_debugger);
 
