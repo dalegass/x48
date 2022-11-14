@@ -2219,6 +2219,96 @@ step_instruction()
   return stop;
 }
 
+static int keyfd = -1;
+
+static void write_slave(unsigned char addr, unsigned char data) {
+	if (ioctl(keyfd, I2C_SLAVE, addr) < 0) {
+		perror("Can't ioctl i2c slave for write");
+		exit(1);
+	}
+	if (1 != write(keyfd, &data, 1)) {
+		perror("Can't write i2c slave");
+		exit(1);
+	}
+}
+
+static unsigned char read_slave(unsigned char addr) {
+	if (ioctl(keyfd, I2C_SLAVE, addr) < 0) {
+		perror("Can't ioctl i2c slave");
+		exit(1);
+	}
+	unsigned char b;
+	if (1 != read(keyfd, &b, 1)) {
+		perror("Can't read i2c slave");
+		exit(1);
+	}
+	return b;
+}
+
+static void init_keys() {
+	if (keyfd != -1) return;
+	keyfd = open("/dev/i2c-3", O_RDWR);
+	if (keyfd < 0) {
+		perror("Can't open i2c master");
+		exit(1);
+	}
+	printf("Slave opened as %d\n", keyfd);
+	write_slave(0x20, 0x3f);	// Inputs need all 1's on the output
+	write_slave(0x21, 0x00);	// Inputs need all 1's on the output
+}
+
+// 20:
+// Pin  Phys
+// 0	Col 0	Input Mask
+// 1	Col 1	"
+// 2	Col 2	"
+// 3	Col 3	"
+// 4	Col 4	"
+// 5	Col 5	"
+// 6	Row 8	Output Row	< Physical ordering
+// 7	Row 7	"
+//
+// 0	Row 6	"
+// 1	Row 5	"
+// 2	Row 4	"
+// 3	Row 3	"
+// 4	Row 2	"
+// 5	Row 1	"
+// 6	Row 0	"
+// 7	RESET
+//
+static unsigned char rowmap[] = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
+// static unsigned char rowmap[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+
+void handle_keys() {
+	init_keys();
+
+	unsigned char new_on = 0;
+	for (unsigned char r=0; r<9; r++) {
+		unsigned char row = rowmap[r];
+		unsigned short mask = 1<<row;
+		unsigned char o1 = ((((mask>>7) & 3) << 6) ^ 0xc0) | 0x3f;
+		unsigned char o2 = ((mask & 0x7f) ^ 0x7f) | 0x80;
+		write_slave(0x20, o1);
+		write_slave(0x21, o2);	// Output row 6-0, reset low input
+//		printf("VALS: mask=%03X, %02X %02X\n", mask, o1^0xff, o2^0xff);
+		unsigned char b1 = (read_slave(0x20) ^ 0xff) & 0x3f;
+		unsigned char old = saturn.keybuf.rows[r];
+		if ((old^b1) & b1) {
+			new_on++;
+			printf("r=%d realrow=%d bits=%03X\n", r, row, b1);
+		}
+		saturn.keybuf.rows[r] = b1;
+	}
+	sleep(1);
+
+    if (new_on && saturn.kbd_ien) {
+	printf("Queueing keyboard interrupt 2\n");
+        do_kbd_int();
+        for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
+    }
+}
+
 inline void
 #ifdef __FunctionProto__
 schedule(void)
@@ -2425,72 +2515,8 @@ schedule()
     if (disp.display_update) refresh_display();
 #endif
     GetEvent();
+//    handle_keys();
   }
-}
-
-static int keyfd = -1;
-
-static void write_slave(unsigned char addr, unsigned char data) {
-	if (ioctl(keyfd, I2C_SLAVE, addr) < 0) {
-		perror("Can't ioctl i2c slave for write");
-		exit(1);
-	}
-	if (1 != write(keyfd, &data, 1)) {
-		perror("Can't write i2c slave");
-		exit(1);
-	}
-}
-
-static unsigned char read_slave(unsigned char addr) {
-	if (ioctl(keyfd, I2C_SLAVE, addr) < 0) {
-		perror("Can't ioctl i2c slave");
-		exit(1);
-	}
-	unsigned char b;
-	if (1 != read(keyfd, &b, 1)) {
-		perror("Can't read i2c slave");
-		exit(1);
-	}
-	return b;
-}
-
-static void init_keys() {
-	if (keyfd != -1) return;
-	keyfd = open("/dev/i2c-3", O_RDWR);
-	if (keyfd < 0) {
-		perror("Can't open i2c master");
-		exit(1);
-	}
-	printf("Slave opened as %d\n", keyfd);
-	write_slave(0x20, 0x3f);	// Inputs need all 1's on the output
-	write_slave(0x21, 0x00);	// Inputs need all 1's on the output
-}
-
-static unsigned char rowmap[] = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
-
-static void handle_keys() {
-	init_keys();
-
-	unsigned char new_on = 0;
-	for (unsigned char r=0; r<9; r++) {
-		unsigned char row = rowmap[r];
-		unsigned short mask = 1<<row;
-		write_slave(0x20, ((((mask>>8) & 3) << 6) ^ 0xc0) | 0x3f);
-		write_slave(0x21, (mask & 0xff) ^ 0xff);
-		unsigned char b1 = (read_slave(0x20) ^ 0xff) & 0x3f;
-		unsigned char old = saturn.keybuf.rows[r];
-		if ((old^b1)&b1) {
-			new_on++;
-			printf("r=%d bits=%03X\n", r, b1);
-		}
-	//	saturn.keybuf.rows[r] = b1;
-	}
-
-    if (new_on && saturn.kbd_ien) {
-	printf("Queueing keyboard interrupt 2\n");
-        do_kbd_int();
-        for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
-    }
 }
 
 int
@@ -2523,8 +2549,6 @@ emulate()
   do {
 //  printf("Doing step instruction\n");
     step_instruction();
-    handle_keys();
-//  for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
 
     {
       int i;
@@ -2537,7 +2561,6 @@ emulate()
 	}
       }
     }
-
 /* We need to throttle the speed here. */
     if (schedule_event-- <= 0) schedule();
   } while (!enter_debugger);

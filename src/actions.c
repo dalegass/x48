@@ -573,6 +573,8 @@ get_identification()
   return 0;
 }
 
+extern void handle_keys(void);
+
 void
 #ifdef __FunctionProto__
 do_shutdown(void)
@@ -639,6 +641,9 @@ do_shutdown()
         if (interrupt_called)
           wake = 1;
       }
+      handle_keys();     
+      if (interrupt_called)
+          wake = 1;
 
       if (saturn.timer2 <= 0)
         {
