@@ -2280,11 +2280,11 @@ static void init_keys() {
 static unsigned char rowmap[] = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
 // static unsigned char rowmap[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
-void handle_keys() {
-	return;
+int handle_keys() {
+	return 0;
 	static unsigned short skipper = 20;
 	static char on_pressed = 0;
-	if (skipper--) return;
+	if (skipper--) return 0;
 	skipper = 20;
 
 	init_keys();
@@ -2326,13 +2326,13 @@ void handle_keys() {
 			saturn.keybuf.rows[r] &= ~new_off_bits;
 		}
 	}
-	sleep(1);
 
     if (new_on && saturn.kbd_ien) {
-//	printf("Queueing keyboard interrupt 2\n");
+	printf("Queueing keyboard interrupt 2\n");
         do_kbd_int();
 //      for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
     }
+    return new_on;
 }
 
 inline void
@@ -2542,9 +2542,7 @@ schedule()
 #endif
     GetEvent();
 //    printf("GetEvent from schedule\n");
-#if 1
     handle_keys();
-#endif
   }
 }
 

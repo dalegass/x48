@@ -573,7 +573,7 @@ get_identification()
   return 0;
 }
 
-extern void handle_keys(void);
+extern int handle_keys(void);
 
 void
 #ifdef __FunctionProto__
@@ -637,15 +637,10 @@ do_shutdown()
       set_t1 = ticks.t1_ticks;
 
       interrupt_called = 0;
-//      printf("GetEvent from actions\n");
-      if (GetEvent()) {
-        if (interrupt_called)
-          wake = 1;
-      }
+//    printf("GetEvent from actions\n");
+      if (GetEvent() && interrupt_called) wake = 1;
 #if 1
-      handle_keys();     
-      if (interrupt_called)
-          wake = 1;
+      if (handle_keys() && interrupt_called) wake = 1;
 #endif
 
       if (saturn.timer2 <= 0) {
