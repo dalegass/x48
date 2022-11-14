@@ -2281,9 +2281,11 @@ static unsigned char rowmap[] = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
 // static unsigned char rowmap[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
 void handle_keys() {
-	static unsigned short skipper = 4;
+	return;
+	static unsigned short skipper = 20;
+	static char on_pressed = 0;
 	if (skipper--) return;
-	skipper = 4;
+	skipper = 20;
 
 	init_keys();
 
@@ -2295,7 +2297,23 @@ void handle_keys() {
 		unsigned char o2 = ((mask & 0x7f) ^ 0x7f) | 0x80;
 		write_slave(0x20, o1);
 		write_slave(0x21, o2);	// Output row 6-0, reset low input
-		unsigned char b1 = (read_slave(0x20) ^ 0xff) & 0x3f;
+
+		if ((read_slave(0x21) & 0x80) == 0) {
+			if (!on_pressed) {
+				printf("Flipping ON\n");
+				on_pressed = 1;
+				for (int i=0; i<9; i++) saturn.keybuf.rows[r] |= 0x8000;
+				new_on++;
+			}
+		} else {
+			if (on_pressed) {
+				printf("Releasing ON\n");
+				on_pressed = 0;
+				for (int i=0; i<9; i++) saturn.keybuf.rows[r] &= ~0x8000;
+			}
+		}
+
+		unsigned char b1 = read_slave(0x20) & 0x3f;
 		unsigned char old = saturn.keybuf.rows[r];
 		unsigned char new_on_bits  = (old^b1) &  b1;
 		unsigned char new_off_bits = (old^b1) & ~b1;
