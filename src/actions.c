@@ -637,57 +637,38 @@ do_shutdown()
       set_t1 = ticks.t1_ticks;
 
       interrupt_called = 0;
+//      printf("GetEvent from actions\n");
       if (GetEvent()) {
         if (interrupt_called)
           wake = 1;
       }
+#if 1
       handle_keys();     
       if (interrupt_called)
           wake = 1;
+#endif
 
-      if (saturn.timer2 <= 0)
-        {
-          if (saturn.t2_ctrl & 0x04)
-            {
-              wake = 1;
-            }
-          if (saturn.t2_ctrl & 0x02)
-            {
-              wake = 1;
-              saturn.t2_ctrl |= 0x08;
-              do_interupt();
-            }
+      if (saturn.timer2 <= 0) {
+          if (saturn.t2_ctrl & 0x04) { wake = 1; }
+          if (saturn.t2_ctrl & 0x02) { wake = 1; saturn.t2_ctrl |= 0x08; do_interupt(); }
         }
 
-      if (saturn.timer1 <= 0)
-        {
+      if (saturn.timer1 <= 0) {
           saturn.timer1 &= 0x0f;
-          if (saturn.t1_ctrl & 0x04)
-            {
-              wake = 1;
-            }
-          if (saturn.t1_ctrl & 0x03)
-            {
-              wake = 1;
-              saturn.t1_ctrl |= 0x08;
-              do_interupt();
-            }
+          if (saturn.t1_ctrl & 0x04) { wake = 1; }
+          if (saturn.t1_ctrl & 0x03) { wake = 1; saturn.t1_ctrl |= 0x08; do_interupt(); }
         }
 
       if (wake == 0) {
         interrupt_called = 0;
         receive_char();
-        if (interrupt_called)
-          wake = 1;
+        if (interrupt_called) wake = 1;
       }
 
       alarms++;
     }
 
-    if (enter_debugger)
-      {
-        wake = 1;
-      }
+    if (enter_debugger) { wake = 1; }
   } while (wake == 0);
 
   stop_timer(IDLE_TIMER);

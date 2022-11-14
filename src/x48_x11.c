@@ -3708,58 +3708,38 @@ GetEvent()
   static Time last_release_time = 0;
 
   wake = 0;
-  if (paste_last_key)
-    {
+  if (paste_last_key) {
       button_released (paste[paste_count - 1]);
       paste_last_key = 0;
       return 1;
-    }
-  else if (paste_count < paste_size)
-    {
+    } else if (paste_count < paste_size) {
       button_pressed (paste[paste_count]);
       paste_last_key = 1;
       paste_count++;
       return 1;
     }
 
-  if (release_pending)
-    {
+  if (release_pending) {
       i = XLookupString (&release_event, buf, bufs, &sym, NULL);
       wake = decode_key ((XEvent *) & release_event, sym, buf, i);
       release_pending = 0;
       return wake;
     }
 
-  do
-    {
-      while (XPending (dpy) > 0)
-	{
-
+  do {
+      while (XPending (dpy) > 0) {
 	  XNextEvent (dpy, &xev);
-
-	  switch ((int) xev.type)
-	    {
-
+	  switch ((int) xev.type) {
 	    case KeyPress:
-
-	      if (0 && release_pending)
-		{
-		  printf ("xxx release_pending\n");
-		}
+	      if (0 && release_pending) { printf ("xxx release_pending\n"); }
 	      release_pending = 0;
-	      if ((xev.xkey.time - last_release_time) <= 1)
-		{
-		  release_pending = 0;
-		  break;
-		}
-
+	      if ((xev.xkey.time - last_release_time) <= 1) { release_pending = 0; break; }
 	      i = XLookupString (&xev.xkey, buf, bufs, &sym, NULL);
 	      wake = decode_key (&xev, sym, buf, i);
 	      first_key = 1;
 	      break;
 
 	    case KeyRelease:
-
 	      i = XLookupString (&xev.xkey, buf, bufs, &sym, NULL);
 	      first_key = 0;
 	      release_pending = 1;
@@ -3768,77 +3748,45 @@ GetEvent()
 	      break;
 
 	    case NoExpose:
-
 	      break;
 
 	    case Expose:
-
-	      if (xev.xexpose.count == 0)
-		{
-		  if (xev.xexpose.window == disp.win)
-		    {
-		      DrawDisp ();
-		    }
-		  else if (xev.xexpose.window == iconW)
-		    {
-		      DrawIcon ();
-		    }
-		  else if (xev.xexpose.window == mainW)
-		    {
-		      DrawKeypad(&keypad);
-		    }
-		  else
-		    for (i = BUTTON_A; i <= LAST_BUTTON; i++)
-		      {
-			if (xev.xexpose.window == buttons[i].xwin)
-			  {
-			    DrawButton (i);
-			    break;
-			  }
-		      }
+	      if (xev.xexpose.count == 0) {
+		  if (xev.xexpose.window == disp.win) { DrawDisp (); }
+		  else if (xev.xexpose.window == iconW) { DrawIcon (); }
+		  else if (xev.xexpose.window == mainW) { DrawKeypad(&keypad); }
+		  else for (i = BUTTON_A; i <= LAST_BUTTON; i++) {
+			if (xev.xexpose.window == buttons[i].xwin) { DrawButton (i); break; } }
 		}
 	      break;
-	    case UnmapNotify:
 
+	    case UnmapNotify:
 	      disp.mapped = 0;
 	      break;
 
 	    case MapNotify:
-
-	      if (!disp.mapped)
-		{
-		  disp.mapped = 1;
-		  update_display ();
-		  redraw_annunc ();
-		}
+	      if (!disp.mapped) { disp.mapped = 1; update_display (); redraw_annunc (); }
 	      break;
 
 	    case ButtonPress:
-
-	      if (xev.xbutton.subwindow == disp.win)
-		{
-		  if (xev.xbutton.button == Button2)
-		    {
-		      if (xev.xbutton.subwindow == disp.win)
-			{
+	      if (xev.xbutton.subwindow == disp.win) {
+		  if (xev.xbutton.button == Button2) {
+		      if (xev.xbutton.subwindow == disp.win) {
 			  int x;
 			  int flag = 0;
 			  char *paste_in = XFetchBuffer (dpy, &x, 0);
 
 			  char *p = paste_in;
-			  if (x > MAX_PASTE)
-			    {
+			  if (x > MAX_PASTE) {
 			      x = 0;
 			      printf ("input too long. limit is %d characters\n",
 				      MAX_PASTE);
 			    }
 			  paste_count = 0;
 			  paste_size = 0;
-			  while (x--)
-			    {
+			  while (x--) {
 			      char c = *p++;
-			      switch (c)
-				{
+			      switch (c) {
 				case '.': paste[paste_size++] = BUTTON_PERIOD; break;
 				case '0': paste[paste_size++] = BUTTON_0; break;
 				case '1': paste[paste_size++] = BUTTON_1; break;

@@ -2281,6 +2281,10 @@ static unsigned char rowmap[] = { 6, 5, 4, 3, 2, 1, 0, 8, 7 };
 // static unsigned char rowmap[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
 void handle_keys() {
+	static unsigned short skipper = 4;
+	if (skipper--) return;
+	skipper = 4;
+
 	init_keys();
 
 	unsigned char new_on = 0;
@@ -2291,21 +2295,25 @@ void handle_keys() {
 		unsigned char o2 = ((mask & 0x7f) ^ 0x7f) | 0x80;
 		write_slave(0x20, o1);
 		write_slave(0x21, o2);	// Output row 6-0, reset low input
-//		printf("VALS: mask=%03X, %02X %02X\n", mask, o1^0xff, o2^0xff);
 		unsigned char b1 = (read_slave(0x20) ^ 0xff) & 0x3f;
 		unsigned char old = saturn.keybuf.rows[r];
-		if ((old^b1) & b1) {
+		unsigned char new_on_bits  = (old^b1) &  b1;
+		unsigned char new_off_bits = (old^b1) & ~b1;
+		if (new_on_bits) {
 			new_on++;
-			printf("r=%d realrow=%d bits=%03X\n", r, row, b1);
+//			printf(" On: r=%d realrow=%d bits=%03X\n", r, row, b1);
+			saturn.keybuf.rows[r] |= new_on_bits;
+		} else if (new_off_bits) {
+//			printf("Off: r=%d realrow=%d bits=%03X\n", r, row, b1);
+			saturn.keybuf.rows[r] &= ~new_off_bits;
 		}
-		saturn.keybuf.rows[r] = b1;
 	}
 	sleep(1);
 
     if (new_on && saturn.kbd_ien) {
-	printf("Queueing keyboard interrupt 2\n");
+//	printf("Queueing keyboard interrupt 2\n");
         do_kbd_int();
-        for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
+//      for (int i=0; i<9; i++) printf("%02X ", saturn.keybuf.rows[i]); putchar('\n');
     }
 }
 
@@ -2515,7 +2523,10 @@ schedule()
     if (disp.display_update) refresh_display();
 #endif
     GetEvent();
-//    handle_keys();
+//    printf("GetEvent from schedule\n");
+#if 1
+    handle_keys();
+#endif
   }
 }
 
