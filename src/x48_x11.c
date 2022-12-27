@@ -168,90 +168,50 @@ keypad_t  keypad;
 color_t  *colors;
 
 color_t colors_sx[] = {
-  { "white", 255, 255, 255, 255, 255,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "left", 255, 166, 0, 255, 230,
-     { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "right", 0, 210, 255, 255, 169,
-     { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "but_top", 109, 93, 93, 0, 91,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "button", 90, 77, 77, 0, 81,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "but_bot", 76, 65, 65, 0, 69,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "lcd_col", 202, 221, 92, 255, 205,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pix_col", 0, 0, 128, 0, 20,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pad_top", 109, 78, 78, 0, 88,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pad", 90, 64, 64, 0, 73,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pad_bot", 76, 54, 54, 0, 60,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "disp_pad_top", 155, 118, 84, 0, 124,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "disp_pad", 124, 94, 67, 0, 99,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "disp_pad_bot", 100, 75, 53, 0, 79,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "logo", 204, 169, 107, 255, 172,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "logo_back", 64, 64, 64, 0, 65,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "label", 202, 184, 144, 255, 185,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "frame", 0, 0, 0, 255, 0,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "underlay", 60, 42, 42, 0, 48,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "black", 0, 0, 0, 0, 0,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "white", 255, 255, 255, 255, 255, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "left", 255, 166, 0, 255, 230, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "right", 0, 210, 255, 255, 169, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "but_top", 109, 93, 93, 0, 91, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "button", 90, 77, 77, 0, 81, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "but_bot", 76, 65, 65, 0, 69, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "lcd_col", 202, 221, 92, 255, 205, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pix_col", 0, 0, 128, 0, 20, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pad_top", 109, 78, 78, 0, 88, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pad", 90, 64, 64, 0, 73, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pad_bot", 76, 54, 54, 0, 60, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "disp_pad_top", 155, 118, 84, 0, 124, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "disp_pad", 124, 94, 67, 0, 99, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "disp_pad_bot", 100, 75, 53, 0, 79, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "logo", 204, 169, 107, 255, 172, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "logo_back", 64, 64, 64, 0, 65, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "label", 202, 184, 144, 255, 185, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "frame", 0, 0, 0, 255, 0, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "underlay", 60, 42, 42, 0, 48, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "black", 0, 0, 0, 0, 0, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
   { 0 }
 };
 
 color_t colors_gx[] = {
-  { "white", 255, 255, 255, 255, 255,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "left", 255, 186, 255, 255, 220,
-     { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "right", 0, 255, 204, 255, 169,
-     { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "but_top", 104, 104, 104, 0, 104,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "button", 88, 88, 88, 0, 88,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "but_bot", 74, 74, 74, 0, 74,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "lcd_col", 202, 221, 92, 255, 205,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pix_col", 0, 0, 128, 0, 20,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pad_top", 88, 88, 88, 0, 88,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pad", 74, 74, 74, 0, 74,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "pad_bot", 64, 64, 64, 0, 64,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "disp_pad_top", 128, 128, 138, 0, 128,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "disp_pad", 104, 104, 110, 0, 104,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "disp_pad_bot", 84, 84, 90, 0, 84,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "logo", 176, 176, 184, 255, 176,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "logo_back", 104, 104, 110, 0, 104,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "label", 240, 240, 240, 255, 240,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "frame", 0, 0, 0, 255, 0,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "underlay", 104, 104, 110, 0, 104,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
-  { "black", 0, 0, 0, 0, 0,
-    { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "white", 255, 255, 255, 255, 255, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "left", 255, 186, 255, 255, 220, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "right", 0, 255, 204, 255, 169, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "but_top", 104, 104, 104, 0, 104, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "button", 88, 88, 88, 0, 88, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "but_bot", 74, 74, 74, 0, 74, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "lcd_col", 202, 221, 92, 255, 205, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pix_col", 0, 0, 128, 0, 20, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pad_top", 88, 88, 88, 0, 88, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pad", 74, 74, 74, 0, 74, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "pad_bot", 64, 64, 64, 0, 64, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "disp_pad_top", 128, 128, 138, 0, 128, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "disp_pad", 104, 104, 110, 0, 104, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "disp_pad_bot", 84, 84, 90, 0, 84, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "logo", 176, 176, 184, 255, 176, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "logo_back", 104, 104, 110, 0, 104, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "label", 240, 240, 240, 255, 240, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "frame", 0, 0, 0, 255, 0, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "underlay", 104, 104, 110, 0, 104, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
+  { "black", 0, 0, 0, 0, 0, { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 } },
   { 0 }
 };
 
@@ -347,135 +307,63 @@ typedef struct button_t {
 button_t *buttons;
 
 button_t buttons_sx[] = {
-  { "A", 0, 0, 0x14,  0, 0, 36, 23, WHITE,
-     0, 0, menu_label_width, menu_label_height, menu_label_bits,
-    "A", 0, 0, 0, 0, 0 },
-  { "B", 0, 0, 0x84,  50, 0, 36, 23, WHITE,
-     0, 0, menu_label_width, menu_label_height, menu_label_bits,
-    "B", 0, 0, 0, 0, 0 },
-  { "C", 0, 0, 0x83, 100, 0, 36, 23, WHITE,
-     0, 0, menu_label_width, menu_label_height, menu_label_bits,
-    "C", 0, 0, 0, 0, 0 },
-  { "D", 0, 0, 0x82, 150, 0, 36, 23, WHITE,
-     0, 0, menu_label_width, menu_label_height, menu_label_bits,
-    "D", 0, 0, 0, 0, 0 },
-  { "E", 0, 0, 0x81, 200, 0, 36, 23, WHITE,
-     0, 0, menu_label_width, menu_label_height, menu_label_bits,
-    "E", 0, 0, 0, 0, 0 },
-  { "F", 0, 0, 0x80, 250, 0, 36, 23, WHITE,
-     0, 0, menu_label_width, menu_label_height, menu_label_bits,
-    "F", 0, 0, 0, 0, 0 },
+  { "A", 0, 0, 0x14,  0, 0, 36, 23, WHITE, 0, 0, menu_label_width, menu_label_height, menu_label_bits, "A", 0, 0, 0, 0, 0 },
+  { "B", 0, 0, 0x84,  50, 0, 36, 23, WHITE, 0, 0, menu_label_width, menu_label_height, menu_label_bits, "B", 0, 0, 0, 0, 0 },
+  { "C", 0, 0, 0x83, 100, 0, 36, 23, WHITE, 0, 0, menu_label_width, menu_label_height, menu_label_bits, "C", 0, 0, 0, 0, 0 },
+  { "D", 0, 0, 0x82, 150, 0, 36, 23, WHITE, 0, 0, menu_label_width, menu_label_height, menu_label_bits, "D", 0, 0, 0, 0, 0 },
+  { "E", 0, 0, 0x81, 200, 0, 36, 23, WHITE, 0, 0, menu_label_width, menu_label_height, menu_label_bits, "E", 0, 0, 0, 0, 0 },
+  { "F", 0, 0, 0x80, 250, 0, 36, 23, WHITE, 0, 0, menu_label_width, menu_label_height, menu_label_bits, "F", 0, 0, 0, 0, 0 },
 
-  { "MTH", 0, 0, 0x24,  0, 50, 36, 26, WHITE, "MTH", 0, 0, 0, 0,
-    "G", "PRINT", 1, 0, 0, 0 },
-  { "PRG", 0, 0, 0x74,  50, 50, 36, 26, WHITE, "PRG", 0, 0, 0, 0,
-    "H", "I/O", 1, 0, 0, 0 },
-  { "CST", 0, 0, 0x73, 100, 50, 36, 26, WHITE, "CST", 0, 0, 0, 0,
-    "I", "MODES", 1, 0, 0, 0 },
-  { "VAR", 0, 0, 0x72, 150, 50, 36, 26, WHITE, "VAR", 0, 0, 0, 0,
-    "J", "MEMORY", 1, 0, 0, 0 },
-  { "UP", 0, 0, 0x71, 200, 50, 36, 26, WHITE,
-     0, 0, up_width, up_height, up_bits,
-    "K", "LIBRARY", 1, 0, 0, 0 },
-  { "NXT", 0, 0, 0x70, 250, 50, 36, 26, WHITE, "NXT", 0, 0, 0, 0,
-    "L", "PREV", 0, 0, 0, 0 },
+  { "MTH", 0, 0, 0x24,  0, 50, 36, 26, WHITE, "MTH", 0, 0, 0, 0, "G", "PRINT", 1, 0, 0, 0 },
+  { "PRG", 0, 0, 0x74,  50, 50, 36, 26, WHITE, "PRG", 0, 0, 0, 0, "H", "I/O", 1, 0, 0, 0 },
+  { "CST", 0, 0, 0x73, 100, 50, 36, 26, WHITE, "CST", 0, 0, 0, 0, "I", "MODES", 1, 0, 0, 0 },
+  { "VAR", 0, 0, 0x72, 150, 50, 36, 26, WHITE, "VAR", 0, 0, 0, 0, "J", "MEMORY", 1, 0, 0, 0 },
+  { "UP", 0, 0, 0x71, 200, 50, 36, 26, WHITE, 0, 0, up_width, up_height, up_bits, "K", "LIBRARY", 1, 0, 0, 0 },
+  { "NXT", 0, 0, 0x70, 250, 50, 36, 26, WHITE, "NXT", 0, 0, 0, 0, "L", "PREV", 0, 0, 0, 0 },
 
-  { "COLON", 0, 0, 0x04,  0, 100, 36, 26, WHITE,
-     0, 0, colon_width, colon_height, colon_bits,
-    "M", "UP", 0, "HOME", 0, 0 },
-  { "STO", 0, 0, 0x64,  50, 100, 36, 26, WHITE, "STO", 0, 0, 0, 0,
-    "N", "DEF", 0, "RCL", 0, 0 },
-  { "EVAL", 0, 0, 0x63, 100, 100, 36, 26, WHITE, "EVAL", 0, 0, 0, 0,
-    "O", "aQ", 0, "aNUM", 0, 0 },
-  { "LEFT", 0, 0, 0x62, 150, 100, 36, 26, WHITE,
-     0, 0, left_width, left_height, left_bits,
-    "P", "GRAPH", 0, 0, 0, 0 },
-  { "DOWN", 0, 0, 0x61, 200, 100, 36, 26, WHITE,
-     0, 0, down_width, down_height, down_bits,
-    "Q", "REVIEW", 0, 0, 0, 0 },
-  { "RIGHT", 0, 0, 0x60, 250, 100, 36, 26, WHITE,
-     0, 0, right_width, right_height, right_bits,
-    "R", "SWAP", 0, 0, 0, 0 },
+  { "COLON", 0, 0, 0x04,  0, 100, 36, 26, WHITE, 0, 0, colon_width, colon_height, colon_bits, "M", "UP", 0, "HOME", 0, 0 },
+  { "STO", 0, 0, 0x64,  50, 100, 36, 26, WHITE, "STO", 0, 0, 0, 0, "N", "DEF", 0, "RCL", 0, 0 },
+  { "EVAL", 0, 0, 0x63, 100, 100, 36, 26, WHITE, "EVAL", 0, 0, 0, 0, "O", "aQ", 0, "aNUM", 0, 0 },
+  { "LEFT", 0, 0, 0x62, 150, 100, 36, 26, WHITE, 0, 0, left_width, left_height, left_bits, "P", "GRAPH", 0, 0, 0, 0 },
+  { "DOWN", 0, 0, 0x61, 200, 100, 36, 26, WHITE, 0, 0, down_width, down_height, down_bits, "Q", "REVIEW", 0, 0, 0, 0 },
+  { "RIGHT", 0, 0, 0x60, 250, 100, 36, 26, WHITE, 0, 0, right_width, right_height, right_bits, "R", "SWAP", 0, 0, 0, 0 },
 
-  { "SIN", 0, 0, 0x34,  0, 150, 36, 26, WHITE, "SIN", 0, 0, 0, 0,
-    "S", "ASIN", 0, "b", 0, 0 },
-  { "COS", 0, 0, 0x54,  50, 150, 36, 26, WHITE, "COS", 0, 0, 0, 0,
-    "T", "ACOS", 0, "c", 0, 0 },
-  { "TAN", 0, 0, 0x53,  100, 150, 36, 26, WHITE, "TAN", 0, 0, 0, 0,
-    "U", "ATAN", 0, "d", 0, 0 },
-  { "SQRT", 0, 0, 0x52,  150, 150, 36, 26, WHITE,
-     0, 0, sqrt_width, sqrt_height, sqrt_bits,
-    "V", "e", 0, "f", 0, 0 },
-  { "POWER", 0, 0, 0x51,  200, 150, 36, 26, WHITE,
-     0, 0, power_width, power_height, power_bits,
-    "W", "g", 0, "LOG", 0, 0 },
-  { "INV", 0, 0, 0x50,  250, 150, 36, 26, WHITE,
-     0, 0, inv_width, inv_height, inv_bits,
-    "X", "h", 0, "LN", 0, 0 },
+  { "SIN", 0, 0, 0x34,  0, 150, 36, 26, WHITE, "SIN", 0, 0, 0, 0, "S", "ASIN", 0, "b", 0, 0 },
+  { "COS", 0, 0, 0x54,  50, 150, 36, 26, WHITE, "COS", 0, 0, 0, 0, "T", "ACOS", 0, "c", 0, 0 },
+  { "TAN", 0, 0, 0x53,  100, 150, 36, 26, WHITE, "TAN", 0, 0, 0, 0, "U", "ATAN", 0, "d", 0, 0 },
+  { "SQRT", 0, 0, 0x52,  150, 150, 36, 26, WHITE, 0, 0, sqrt_width, sqrt_height, sqrt_bits, "V", "e", 0, "f", 0, 0 },
+  { "POWER", 0, 0, 0x51,  200, 150, 36, 26, WHITE, 0, 0, power_width, power_height, power_bits, "W", "g", 0, "LOG", 0, 0 },
+  { "INV", 0, 0, 0x50,  250, 150, 36, 26, WHITE, 0, 0, inv_width, inv_height, inv_bits, "X", "h", 0, "LN", 0, 0 },
 
-  { "ENTER", 0, 0, 0x44, 0, 200, 86, 26, WHITE, "ENTER", 2, 0, 0, 0,
-     0, "EQUATION", 0, "MATRIX", 0, 0 },
-  { "NEG", 0, 0, 0x43, 100, 200, 36, 26, WHITE,
-     0, 0, neg_width, neg_height, neg_bits,
-    "Y", "EDIT", 0, "VISIT", 0, 0 },
-  { "EEX", 0, 0, 0x42, 150, 200, 36, 26, WHITE, "EEX", 0, 0, 0, 0,
-    "Z", "2D", 0, "3D", 0, 0 },
-  { "DEL", 0, 0, 0x41, 200, 200, 36, 26, WHITE, "DEL", 0, 0, 0, 0,
-     0, "PURGE", 0, 0, 0, 0 },
-  { "BS", 0, 0, 0x40, 250, 200, 36, 26, WHITE,
-     0, 0, bs_width, bs_height, bs_bits,
-     0, "DROP", 0, "CLR", 0, 0 },
+  { "ENTER", 0, 0, 0x44, 0, 200, 86, 26, WHITE, "ENTER", 2, 0, 0, 0, 0, "EQUATION", 0, "MATRIX", 0, 0 },
+  { "NEG", 0, 0, 0x43, 100, 200, 36, 26, WHITE, 0, 0, neg_width, neg_height, neg_bits, "Y", "EDIT", 0, "VISIT", 0, 0 },
+  { "EEX", 0, 0, 0x42, 150, 200, 36, 26, WHITE, "EEX", 0, 0, 0, 0, "Z", "2D", 0, "3D", 0, 0 },
+  { "DEL", 0, 0, 0x41, 200, 200, 36, 26, WHITE, "DEL", 0, 0, 0, 0, 0, "PURGE", 0, 0, 0, 0 },
+  { "BS", 0, 0, 0x40, 250, 200, 36, 26, WHITE, 0, 0, bs_width, bs_height, bs_bits, 0, "DROP", 0, "CLR", 0, 0 },
 
-  { "ALPHA", 0, 0, 0x35, 0, 250, 36, 26, WHITE,
-     0, 0, alpha_width, alpha_height, alpha_bits,
-     0, "USR", 0, "ENTRY", 0, 0 },
-  { "7", 0, 0, 0x33, 60, 250, 46, 26, WHITE, "7", 1, 0, 0, 0,
-     0, "SOLVE", 1, 0, 0, 0 },
-  { "8", 0, 0, 0x32, 120, 250, 46, 26, WHITE, "8", 1, 0, 0, 0,
-     0, "PLOT", 1, 0, 0, 0 },
-  { "9", 0, 0, 0x31, 180, 250, 46, 26, WHITE, "9", 1, 0, 0, 0,
-     0, "ALGEBRA", 1, 0, 0, 0 },
-  { "DIV", 0, 0, 0x30, 240, 250, 46, 26, WHITE,
-     0, 0, div_width, div_height, div_bits,
-     0, "( )", 0, "#", 0, 0 },
+  { "ALPHA", 0, 0, 0x35, 0, 250, 36, 26, WHITE, 0, 0, alpha_width, alpha_height, alpha_bits, 0, "USR", 0, "ENTRY", 0, 0 },
+  { "7", 0, 0, 0x33, 60, 250, 46, 26, WHITE, "7", 1, 0, 0, 0, 0, "SOLVE", 1, 0, 0, 0 },
+  { "8", 0, 0, 0x32, 120, 250, 46, 26, WHITE, "8", 1, 0, 0, 0, 0, "PLOT", 1, 0, 0, 0 },
+  { "9", 0, 0, 0x31, 180, 250, 46, 26, WHITE, "9", 1, 0, 0, 0, 0, "ALGEBRA", 1, 0, 0, 0 },
+  { "DIV", 0, 0, 0x30, 240, 250, 46, 26, WHITE, 0, 0, div_width, div_height, div_bits, 0, "( )", 0, "#", 0, 0 },
 
-  { "SHL", 0, 0, 0x25, 0, 300, 36, 26, LEFT,
-     0, 0, shl_width, shl_height, shl_bits,
-     0, 0, 0, 0, 0, 0 },
-  { "4", 0, 0, 0x23, 60, 300, 46, 26, WHITE, "4", 1, 0, 0, 0,
-     0, "TIME", 1, 0, 0, 0 },
-  { "5", 0, 0, 0x22, 120, 300, 46, 26, WHITE, "5", 1, 0, 0, 0,
-     0, "STAT", 1, 0, 0, 0 },
-  { "6", 0, 0, 0x21, 180, 300, 46, 26, WHITE, "6", 1, 0, 0, 0,
-     0, "UNITS", 1, 0, 0, 0 },
-  { "MUL", 0, 0, 0x20, 240, 300, 46, 26, WHITE,
-     0, 0, mul_width, mul_height, mul_bits,
-     0, "[ ]", 0, "_", 0, 0 },
+  { "SHL", 0, 0, 0x25, 0, 300, 36, 26, LEFT, 0, 0, shl_width, shl_height, shl_bits, 0, 0, 0, 0, 0, 0 },
+  { "4", 0, 0, 0x23, 60, 300, 46, 26, WHITE, "4", 1, 0, 0, 0, 0, "TIME", 1, 0, 0, 0 },
+  { "5", 0, 0, 0x22, 120, 300, 46, 26, WHITE, "5", 1, 0, 0, 0, 0, "STAT", 1, 0, 0, 0 },
+  { "6", 0, 0, 0x21, 180, 300, 46, 26, WHITE, "6", 1, 0, 0, 0, 0, "UNITS", 1, 0, 0, 0 },
+  { "MUL", 0, 0, 0x20, 240, 300, 46, 26, WHITE, 0, 0, mul_width, mul_height, mul_bits, 0, "[ ]", 0, "_", 0, 0 },
 
-  { "SHR", 0, 0, 0x15, 0, 350, 36, 26, RIGHT,
-     0, 0, shr_width, shr_height, shr_bits,
-     0, 0, 0, 0, 0, 0 },
-  { "1", 0, 0, 0x13, 60, 350, 46, 26, WHITE, "1", 1, 0, 0, 0,
-     0, "RAD", 0, "POLAR", 0, 0 },
-  { "2", 0, 0, 0x12, 120, 350, 46, 26, WHITE, "2", 1, 0, 0, 0,
-     0, "STACK", 0, "ARG", 0, 0 },
-  { "3", 0, 0, 0x11, 180, 350, 46, 26, WHITE, "3", 1, 0, 0, 0,
-     0, "CMD", 0, "MENU", 0, 0 },
-  { "MINUS", 0, 0, 0x10, 240, 350, 46, 26, WHITE,
-     0, 0, minus_width, minus_height, minus_bits,
-     0, "i", 0, "j", 0, 0 },
+  { "SHR", 0, 0, 0x15, 0, 350, 36, 26, RIGHT, 0, 0, shr_width, shr_height, shr_bits, 0, 0, 0, 0, 0, 0 },
+  { "1", 0, 0, 0x13, 60, 350, 46, 26, WHITE, "1", 1, 0, 0, 0, 0, "RAD", 0, "POLAR", 0, 0 },
+  { "2", 0, 0, 0x12, 120, 350, 46, 26, WHITE, "2", 1, 0, 0, 0, 0, "STACK", 0, "ARG", 0, 0 },
+  { "3", 0, 0, 0x11, 180, 350, 46, 26, WHITE, "3", 1, 0, 0, 0, 0, "CMD", 0, "MENU", 0, 0 },
+  { "MINUS", 0, 0, 0x10, 240, 350, 46, 26, WHITE, 0, 0, minus_width, minus_height, minus_bits, 0, "i", 0, "j", 0, 0 },
 
-  { "ON", 0, 0, 0x8000, 0, 400, 36, 26, WHITE, "ON", 0, 0, 0, 0,
-     0, "CONT", 0, "OFF", "ATTN", 0 },
-  { "0", 0, 0, 0x03, 60, 400, 46, 26, WHITE, "0", 1, 0, 0, 0,
-     0, "= ", 0, " a", 0, 0 },
-  { "PERIOD", 0, 0, 0x02, 120, 400, 46, 26, WHITE, ".", 1, 0, 0, 0,
-     0, ", ", 0, " k", 0, 0 },
-  { "SPC", 0, 0, 0x01, 180, 400, 46, 26, WHITE, "SPC", 0, 0, 0, 0,
-     0, "l ", 0, " m", 0, 0 },
-  { "PLUS", 0, 0, 0x00, 240, 400, 46, 26, WHITE,
-     0, 0, plus_width, plus_height, plus_bits,
-     0, "{ }", 0, ": :", 0, 0 },
+  { "ON", 0, 0, 0x8000, 0, 400, 36, 26, WHITE, "ON", 0, 0, 0, 0, 0, "CONT", 0, "OFF", "ATTN", 0 },
+  { "0", 0, 0, 0x03, 60, 400, 46, 26, WHITE, "0", 1, 0, 0, 0, 0, "= ", 0, " a", 0, 0 },
+  { "PERIOD", 0, 0, 0x02, 120, 400, 46, 26, WHITE, ".", 1, 0, 0, 0, 0, ", ", 0, " k", 0, 0 },
+  { "SPC", 0, 0, 0x01, 180, 400, 46, 26, WHITE, "SPC", 0, 0, 0, 0, 0, "l ", 0, " m", 0, 0 },
+  { "PLUS", 0, 0, 0x00, 240, 400, 46, 26, WHITE, 0, 0, plus_width, plus_height, plus_bits, 0, "{ }", 0, ": :", 0, 0 },
 
   { 0 }
 };
@@ -3521,305 +3409,77 @@ int     buflen;
   wake = 0;
   if (buflen == 1)
     switch (buf[0]) {
-      case '0':
-        sym = XK_0;
-        break;
-      case '1':
-        sym = XK_1;
-        break;
-      case '2':
-        sym = XK_2;
-        break;
-      case '3':
-        sym = XK_3;
-        break;
-      case '4':
-        sym = XK_4;
-        break;
-      case '5':
-        sym = XK_5;
-        break;
-      case '6':
-        sym = XK_6;
-        break;
-      case '7':
-        sym = XK_7;
-        break;
-      case '8':
-        sym = XK_8;
-        break;
-      case '9':
-        sym = XK_9;
-        break;
-      default:
-        break;
+      case '0': sym = XK_0; break;
+      case '1': sym = XK_1; break;
+      case '2': sym = XK_2; break;
+      case '3': sym = XK_3; break;
+      case '4': sym = XK_4; break;
+      case '5': sym = XK_5; break;
+      case '6': sym = XK_6; break;
+      case '7': sym = XK_7; break;
+      case '8': sym = XK_8; break;
+      case '9': sym = XK_9; break;
+      default: break;
     }
 
   switch ((int)sym) {
-    case XK_KP_0:
-    case XK_0:
-      key_event(BUTTON_0, xev);
-      wake = 1;
-      break;
-    case XK_KP_1:
-    case XK_1:
-      key_event(BUTTON_1, xev);
-      wake = 1;
-      break;
-    case XK_KP_2:
-    case XK_2:
-      key_event(BUTTON_2, xev);
-      wake = 1;
-      break;
-    case XK_KP_3:
-    case XK_3:
-      key_event(BUTTON_3, xev);
-      wake = 1;
-      break;
-    case XK_KP_4:
-    case XK_4:
-      key_event(BUTTON_4, xev);
-      wake = 1;
-      break;
-    case XK_KP_5:
-    case XK_5:
-      key_event(BUTTON_5, xev);
-      wake = 1;
-      break;
-    case XK_KP_6:
-    case XK_6:
-      key_event(BUTTON_6, xev);
-      wake = 1;
-      break;
-    case XK_KP_7:
-    case XK_7:
-      key_event(BUTTON_7, xev);
-      wake = 1;
-    break;
-    case XK_KP_8:
-    case XK_8:
-      key_event(BUTTON_8, xev);
-      wake = 1;
-      break;
-    case XK_KP_9:
-    case XK_9:
-      key_event(BUTTON_9, xev);
-      wake = 1;
-      break;
-    case XK_KP_Add:
-    case XK_plus:
-    case XK_equal:
-      key_event(BUTTON_PLUS, xev);
-      wake = 1;
-      break;
-    case XK_KP_Subtract:
-    case XK_minus:
-      key_event(BUTTON_MINUS, xev);
-      wake = 1;
-      break;
+    case XK_KP_0: case XK_0: key_event(BUTTON_0, xev); wake = 1; break;
+    case XK_KP_1: case XK_1: key_event(BUTTON_1, xev); wake = 1; break;
+    case XK_KP_2: case XK_2: key_event(BUTTON_2, xev); wake = 1; break;
+    case XK_KP_3: case XK_3: key_event(BUTTON_3, xev); wake = 1; break;
+    case XK_KP_4: case XK_4: key_event(BUTTON_4, xev); wake = 1; break;
+    case XK_KP_5: case XK_5: key_event(BUTTON_5, xev); wake = 1; break;
+    case XK_KP_6: case XK_6: key_event(BUTTON_6, xev); wake = 1; break;
+    case XK_KP_7: case XK_7: key_event(BUTTON_7, xev); wake = 1; break;
+    case XK_KP_8: case XK_8: key_event(BUTTON_8, xev); wake = 1; break;
+    case XK_KP_9: case XK_9: key_event(BUTTON_9, xev); wake = 1; break;
+    case XK_KP_Add: case XK_plus: case XK_equal: key_event(BUTTON_PLUS, xev); wake = 1; break; case XK_KP_Subtract:
+    case XK_minus: key_event(BUTTON_MINUS, xev); wake = 1; break;
 #ifdef XK_F25
     case XK_F25:
 #endif
-    case XK_KP_Divide:
-    case XK_slash:
-      key_event(BUTTON_DIV, xev);
-      wake = 1;
-      break;
+    case XK_KP_Divide: case XK_slash: key_event(BUTTON_DIV, xev); wake = 1; break;
 #ifdef XK_F26
     case XK_F26:
 #endif
-    case XK_KP_Multiply:
-    case XK_asterisk:
-    case XK_comma:
-      key_event(BUTTON_MUL, xev);
-      wake = 1;
-      break;
-    case XK_KP_Enter:
-    case XK_Return:
-      key_event(BUTTON_ENTER, xev);
-      wake = 1;
-      break;
-    case XK_KP_Decimal:
-    case XK_KP_Separator:
-    case XK_period:
-      key_event(BUTTON_PERIOD, xev);
-      wake = 1;
-      break;
-    case XK_space:
-      key_event(BUTTON_SPC, xev);
-      wake = 1;
-      break;
-    case XK_Delete:
-      key_event(BUTTON_DEL, xev);
-      wake = 1;
-      break;
-    case XK_BackSpace:
-      key_event(BUTTON_BS, xev);
-      wake = 1;
-      break;
-    case XK_Escape:
-      key_event(BUTTON_ON, xev);
-      wake = 1;
-      break;
-    case XK_Shift_L:
-    case XK_Control_R:
-      key_event(BUTTON_SHL, xev);
-      wake = 1;
-      break;
-    case XK_Shift_R:
-    case XK_Control_L:
-      key_event(BUTTON_SHR, xev);
-      wake = 1;
-      break;
-    case XK_Alt_L:
-    case XK_Alt_R:
-    case XK_Meta_L:
-    case XK_Meta_R:
-      key_event(BUTTON_ALPHA, xev);
-      wake = 1;
-      break;
-    case XK_a:
-    case XK_A:
-    case XK_F1:
-      key_event(BUTTON_A, xev);
-      wake = 1;
-      break;
-    case XK_b:
-    case XK_B:
-    case XK_F2:
-      key_event(BUTTON_B, xev);
-      wake = 1;
-      break;
-    case XK_c:
-    case XK_C:
-    case XK_F3:
-      key_event(BUTTON_C, xev);
-      wake = 1;
-      break;
-    case XK_d:
-    case XK_D:
-    case XK_F4:
-      key_event(BUTTON_D, xev);
-      wake = 1;
-      break;
-    case XK_e:
-    case XK_E:
-    case XK_F5:
-      key_event(BUTTON_E, xev);
-      wake = 1;
-      break;
-    case XK_f:
-    case XK_F:
-    case XK_F6:
-      key_event(BUTTON_F, xev);
-      wake = 1;
-      break;
-    case XK_g:
-    case XK_G:
-      key_event(BUTTON_MTH, xev);
-      wake = 1;
-      break;
-    case XK_h:
-    case XK_H:
-      key_event(BUTTON_PRG, xev);
-      wake = 1;
-      break;
-    case XK_i:
-    case XK_I:
-      key_event(BUTTON_CST, xev);
-      wake = 1;
-      break;
-    case XK_j:
-    case XK_J:
-      key_event(BUTTON_VAR, xev);
-      wake = 1;
-      break;
-    case XK_k:
-    case XK_K:
-    case XK_Up:
-      key_event(BUTTON_UP, xev);
-      wake = 1;
-      break;
-    case XK_l:
-    case XK_L:
-      key_event(BUTTON_NXT, xev);
-      wake = 1;
-      break;
-    case XK_m:
-    case XK_M:
-      key_event(BUTTON_COLON, xev);
-      wake = 1;
-      break;
-    case XK_n:
-    case XK_N:
-      key_event(BUTTON_STO, xev);
-      wake = 1;
-      break;
-    case XK_o:
-    case XK_O:
-      key_event(BUTTON_EVAL, xev);
-      wake = 1;
-      break;
-    case XK_p:
-    case XK_P:
-    case XK_Left:
-      key_event(BUTTON_LEFT, xev);
-      wake = 1;
-      break;
-    case XK_q:
-    case XK_Q:
-    case XK_Down:
-      key_event(BUTTON_DOWN, xev);
-      wake = 1;
-      break;
-    case XK_r:
-    case XK_R:
-    case XK_Right:
-      key_event(BUTTON_RIGHT, xev);
-      wake = 1;
-      break;
-    case XK_s:
-    case XK_S:
-      key_event(BUTTON_SIN, xev);
-      wake = 1;
-      break;
-    case XK_t:
-    case XK_T:
-      key_event(BUTTON_COS, xev);
-      wake = 1;
-      break;
-    case XK_u:
-    case XK_U:
-      key_event(BUTTON_TAN, xev);
-      wake = 1;
-      break;
-    case XK_v:
-    case XK_V:
-      key_event(BUTTON_SQRT, xev);
-      wake = 1;
-      break;
-    case XK_w:
-    case XK_W:
-      key_event(BUTTON_POWER, xev);
-      wake = 1;
-      break;
-    case XK_x:
-    case XK_X:
-      key_event(BUTTON_INV, xev);
-      wake = 1;
-      break;
-    case XK_y:
-    case XK_Y:
-      key_event(BUTTON_NEG, xev);
-      wake = 1;
-      break;
-    case XK_z:
-    case XK_Z:
-      key_event(BUTTON_EEX, xev);
-      wake = 1;
-      break;
-    default:
-      break;
+    case XK_KP_Multiply: case XK_asterisk: case XK_comma:         key_event(BUTTON_MUL,    xev); wake = 1; break;
+    case XK_KP_Enter:    case XK_Return:                          key_event(BUTTON_ENTER,  xev); wake = 1; break;
+    case XK_KP_Decimal:  case XK_KP_Separator: case XK_period:    key_event(BUTTON_PERIOD, xev); wake = 1; break;
+    case XK_space:                                                key_event(BUTTON_SPC,    xev); wake = 1; break;
+    case XK_Delete:                                               key_event(BUTTON_DEL,    xev); wake = 1; break;
+    case XK_BackSpace:                                            key_event(BUTTON_BS,     xev); wake = 1; break;
+    case XK_Escape:                                               key_event(BUTTON_ON,     xev); wake = 1; break;
+    case XK_Shift_L: case XK_Control_R:                           key_event(BUTTON_SHL,    xev); wake = 1; break;
+    case XK_Shift_R: case XK_Control_L:                           key_event(BUTTON_SHR,    xev); wake = 1; break;
+    case XK_Alt_L: case XK_Alt_R: case XK_Meta_L: case XK_Meta_R: key_event(BUTTON_ALPHA,  xev); wake = 1; break;
+
+    case XK_a: case XK_A: case XK_F1:    key_event(BUTTON_A,     xev); wake = 1; break;
+    case XK_b: case XK_B: case XK_F2:    key_event(BUTTON_B,     xev); wake = 1; break;
+    case XK_c: case XK_C: case XK_F3:    key_event(BUTTON_C,     xev); wake = 1; break;
+    case XK_d: case XK_D: case XK_F4:    key_event(BUTTON_D,     xev); wake = 1; break;
+    case XK_e: case XK_E: case XK_F5:    key_event(BUTTON_E,     xev); wake = 1; break;
+    case XK_f: case XK_F: case XK_F6:    key_event(BUTTON_F,     xev); wake = 1; break;
+    case XK_g: case XK_G:                key_event(BUTTON_MTH,   xev); wake = 1; break;
+    case XK_h: case XK_H:                key_event(BUTTON_PRG,   xev); wake = 1; break;
+    case XK_i: case XK_I:                key_event(BUTTON_CST,   xev); wake = 1; break;
+    case XK_j: case XK_J:                key_event(BUTTON_VAR,   xev); wake = 1; break;
+    case XK_k: case XK_K: case XK_Up:    key_event(BUTTON_UP,    xev); wake = 1; break;
+    case XK_l: case XK_L:                key_event(BUTTON_NXT,   xev); wake = 1; break;
+    case XK_m: case XK_M:                key_event(BUTTON_COLON, xev); wake = 1; break;
+    case XK_n: case XK_N:                key_event(BUTTON_STO,   xev); wake = 1; break;
+    case XK_o: case XK_O:                key_event(BUTTON_EVAL,  xev); wake = 1; break;
+    case XK_p: case XK_P: case XK_Left:  key_event(BUTTON_LEFT,  xev); wake = 1; break;
+    case XK_q: case XK_Q: case XK_Down:  key_event(BUTTON_DOWN,  xev); wake = 1; break;
+    case XK_r: case XK_R: case XK_Right: key_event(BUTTON_RIGHT, xev); wake = 1; break;
+    case XK_s: case XK_S:                key_event(BUTTON_SIN,   xev); wake = 1; break;
+    case XK_t: case XK_T:                key_event(BUTTON_COS,   xev); wake = 1; break;
+    case XK_u: case XK_U:                key_event(BUTTON_TAN,   xev); wake = 1; break;
+    case XK_v: case XK_V:                key_event(BUTTON_SQRT,  xev); wake = 1; break;
+    case XK_w: case XK_W:                key_event(BUTTON_POWER, xev); wake = 1; break;
+    case XK_x: case XK_X:                key_event(BUTTON_INV,   xev); wake = 1; break;
+    case XK_y: case XK_Y:                key_event(BUTTON_NEG,   xev); wake = 1; break;
+    case XK_z: case XK_Z:                key_event(BUTTON_EEX,   xev); wake = 1; break;
+    default: break;
   }
   return wake;
 }

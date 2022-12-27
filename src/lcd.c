@@ -174,6 +174,7 @@ init_display(void)
 init_display()
 #endif
 {
+  printf("\e[2J"); fflush(stdout);
   display.on = (int)(saturn.disp_io & 0x8) >> 3;
 
   display.disp_start = (saturn.disp_addr & 0xffffe);
@@ -226,10 +227,17 @@ int val;
     x -= disp.offset;
   y = (r * 2) + 20;
   val &= 0x0f;
+
   if (val != lcd_buffer[r][c]) {
     XCopyPlane(dpy, nibble_maps[val], disp.win, disp.gc, 0, 0, 8, 2, x, y, 1);
     lcd_buffer[r][c] = val;
   }
+  printf("\e[%d;%df", r+1, (c*4*2)+1); 
+  int v=val;
+  for (int i=0; i<4; i++,v>>=1)
+    printf((v & 0x01) ? "\e[40m  " : "\e[103m  ");
+  printf("\e[0m");
+  fflush(stdout);
 }
 
 static inline void
@@ -377,6 +385,7 @@ redraw_display(void)
 redraw_display()
 #endif
 {
+//printf("Doing redraw display\n");
   XClearWindow(dpy, disp.win);
   memset(disp_buf, 0, sizeof(disp_buf));
   memset(lcd_buffer, 0, sizeof(lcd_buffer));
